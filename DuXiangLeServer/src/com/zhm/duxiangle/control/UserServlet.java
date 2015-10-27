@@ -41,29 +41,11 @@ public class UserServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
-		String userName = request.getParameter("userName");
+		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
-		if (userName == null) {
-			out.print("username is null");
-			return;
-		}
-		if (null == password) {
-			out.print("password is null");
-			return;
-		}
 		UserDao dao = new UserDaoImpl();
-		User user = dao.findUserByUserName(userName);
-		if (user == null) {
-			out.print("user no found");
-			return;
-		}
-		if (!password.equals(user.getPassword())) {
-			out.print("error password");
-			return;
-		}
+		User user = dao.findUserByUserName(userName==null?"":userName);
 		Gson gson = new Gson();
-
-		out.print("login success");
 		String json = gson.toJson(user);
 		out.print(json);
 
