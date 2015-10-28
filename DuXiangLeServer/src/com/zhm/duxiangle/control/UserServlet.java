@@ -10,10 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.security.MD5Encoder;
+
 import com.google.gson.Gson;
 import com.zhm.duxiangle.bean.User;
 import com.zhm.duxiangle.dao.UserDao;
 import com.zhm.duxiangle.dao.impl.UserDaoImpl;
+import com.zhm.duxiangle.utils.MD5Util;
+import com.zhm.duxiangle.utils.TextUtils;
 
 /**
  * Servlet implementation class UserServlet
@@ -41,14 +45,34 @@ public class UserServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 
-		String userName = request.getParameter("username");
+		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+
+		if (TextUtils.isEmpty(username)) {
+			out.print("username is null");
+			return;
+		}
+		if (TextUtils.isEmpty(password)) {
+			out.print("password is null");
+			return;
+		}
+		// when username!=null && password!=null
 		UserDao dao = new UserDaoImpl();
-		User user = dao.findUserByUserName(userName==null?"":userName);
+		User user = dao.findUserByUserName(username == null ? "" : username);
+		if (null == user) {
+			out.print("no found");
+			return;
+		}
+		if (!password.equals(user.getPassword())) {
+			out.print("error password");
+			return;
+		}
+		user.setPassword(MD5Util.endodeStr2MD5(password));
+		user.setStatus("online");// 修改用户为登录状态
+		// 用户存在且密码正确
 		Gson gson = new Gson();
 		String json = gson.toJson(user);
 		out.print(json);
-
 	}
 
 	/**

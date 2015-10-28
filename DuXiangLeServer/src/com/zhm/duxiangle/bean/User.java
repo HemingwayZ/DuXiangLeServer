@@ -2,7 +2,7 @@ package com.zhm.duxiangle.bean;
 
 public class User {
 	private int userId;
-	private String userName;
+	private String username;
 	private String password;
 	private String status;
 
@@ -23,11 +23,11 @@ public class User {
 	}
 
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.username = userName;
 	}
 
 	public String getPassword() {
@@ -40,7 +40,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + "]";
+		return "User [userId=" + userId + ", userName=" + username + ", password=" + password + "]";
 	}
 
 }
