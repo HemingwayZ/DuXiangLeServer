@@ -10,6 +10,7 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import com.zhm.duxiangle.bean.User;
 import com.zhm.duxiangle.dao.UserDao;
 import com.zhm.duxiangle.utils.DaoUtils;
+import com.zhm.duxiangle.utils.MD5Util;
 
 public class UserDaoImpl implements UserDao {
 	String sql = "";
@@ -32,8 +33,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User findUserByUserName(String userName) {
 		// TODO Auto-generated method stub
-		if (runner == null)
+		if (runner == null) {
 			runner = new QueryRunner(DaoUtils.getSource());
+		}
 		sql = "select * from user where userName = ?";
 		try {
 			return runner.query(sql, new BeanHandler<>(User.class), userName);
@@ -41,5 +43,49 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean registerUser(User user) {
+		// TODO Auto-generated method stub
+		user.setPassword(MD5Util.endodeStr2MD5(user.getPassword()));
+		sql = "insert into user values(null,?,?,null)";
+		if (runner == null) {
+			runner = new QueryRunner(DaoUtils.getSource());
+		}
+		try {
+			int i = runner.update(sql, user.getUserName(), user.getPassword());
+			if (i == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updatePassword(String username, String password) {
+		// TODO Auto-generated method stub
+		password = MD5Util.endodeStr2MD5(password);
+		sql = "update user set password = ? where username = ?";
+		if (runner == null) {
+			runner = new QueryRunner(DaoUtils.getSource());
+		}
+		try {
+			int i = runner.update(sql, password, username);
+			if (i == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

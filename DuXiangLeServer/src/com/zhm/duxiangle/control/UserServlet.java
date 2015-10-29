@@ -44,10 +44,14 @@ public class UserServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
+		UserDao dao = new UserDaoImpl();
+		String action = request.getParameter("action");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-
+		if (TextUtils.isEmpty(action)) {
+			out.println("error action");
+			return;
+		}
 		if (TextUtils.isEmpty(username)) {
 			out.print("username is null");
 			return;
@@ -56,23 +60,77 @@ public class UserServlet extends HttpServlet {
 			out.print("password is null");
 			return;
 		}
-		// when username!=null && password!=null
-		UserDao dao = new UserDaoImpl();
-		User user = dao.findUserByUserName(username == null ? "" : username);
-		if (null == user) {
-			out.print("no found");
-			return;
+		User user = dao.findUserByUserName(username);
+
+		if ("login".equals(action)) {
+			if (null == user) {
+				out.print("no found");
+				return;
+			}
+			// when username!=null && password!=null
+			user.setPassword(MD5Util.endodeStr2MD5(password));
+			if (!password.equals(user.getPassword())) {
+				out.print("error password");
+				return;
+			}
+
+			Gson gson = new Gson();
+			String json = gson.toJson(user);
+
+			user.setStatus("online");// 修改用户为登录状态
+			// 用户存在且密码正确
+
+			out.print(json);
+		} else if ("register".equals(action)) {
+			if (null != user) {
+				out.print("user is exist");
+				return;
+			}
+			user = new User();
+			user.setUserName(username);
+			user.setPassword(password);
+
+			boolean b = dao.registerUser(user);
+			if (b) {
+				// 若用户不存在
+				Gson gson = new Gson();
+				String json = gson.toJson(user);
+				out.println(json);
+			} else {
+				out.println("regeister failed");
+			}
+		} else if ("update_password".equals(action)) {// 修改你用户密码
+			if (null == user) {
+				out.print("no found");
+				return;
+			}
+
+			String newPassword = request.getParameter("new_password");
+			if (TextUtils.isEmpty(newPassword)) {
+				out.println("new password is null");
+				return;
+			}
+			if (password.equals(newPassword)) {
+				out.println("password is the same");
+				return;
+			}
+			// 验证旧密码
+			password = MD5Util.endodeStr2MD5(password);
+			if (!user.getPassword().equals(password)) {
+				out.println("error password");
+				return;
+			} else {
+				// 用户存在
+				boolean b = dao.updatePassword(username, newPassword);
+				if (b) {
+					out.println("update success");
+				} else {
+					out.println("update failed");
+				}
+			}
+		} else {
+			out.println("error action");
 		}
-		if (!password.equals(user.getPassword())) {
-			out.print("error password");
-			return;
-		}
-		user.setPassword(MD5Util.endodeStr2MD5(password));
-		user.setStatus("online");// 修改用户为登录状态
-		// 用户存在且密码正确
-		Gson gson = new Gson();
-		String json = gson.toJson(user);
-		out.print(json);
 	}
 
 	/**

@@ -6,6 +6,18 @@ public class User {
 	private String password;
 	private String status;
 
+	
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+
 	public String getStatus() {
 		return status;
 	}
