@@ -49,12 +49,12 @@ public class UserDaoImpl implements UserDao {
 	public boolean registerUser(User user) {
 		// TODO Auto-generated method stub
 		user.setPassword(MD5Util.endodeStr2MD5(user.getPassword()));
-		sql = "insert into user values(null,?,?,null)";
+		sql = "insert into user values(null,?,?,?)";
 		if (runner == null) {
 			runner = new QueryRunner(DaoUtils.getSource());
 		}
 		try {
-			int i = runner.update(sql, user.getUserName(), user.getPassword());
+			int i = runner.update(sql, user.getUserName(), user.getPassword(), "offline");
 			if (i == 1) {
 				return true;
 			} else {

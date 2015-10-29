@@ -36,4 +36,6 @@ public interface UserDao {
 	 * @return
 	 */
 	public boolean updatePassword(String username,String password);
+	
+	
 }

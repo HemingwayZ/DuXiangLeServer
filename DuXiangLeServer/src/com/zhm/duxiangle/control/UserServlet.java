@@ -68,7 +68,7 @@ public class UserServlet extends HttpServlet {
 				return;
 			}
 			// when username!=null && password!=null
-			user.setPassword(MD5Util.endodeStr2MD5(password));
+			password = MD5Util.endodeStr2MD5(password);
 			if (!password.equals(user.getPassword())) {
 				out.print("error password");
 				return;
@@ -93,6 +93,7 @@ public class UserServlet extends HttpServlet {
 			boolean b = dao.registerUser(user);
 			if (b) {
 				// 若用户不存在
+				user = dao.findUserByUserName(username);
 				Gson gson = new Gson();
 				String json = gson.toJson(user);
 				out.println(json);
@@ -128,7 +129,7 @@ public class UserServlet extends HttpServlet {
 					out.println("update failed");
 				}
 			}
-			
+
 		} else {
 			out.println("error action");
 		}
