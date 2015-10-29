@@ -128,6 +128,7 @@ public class UserServlet extends HttpServlet {
 					out.println("update failed");
 				}
 			}
+			
 		} else {
 			out.println("error action");
 		}
