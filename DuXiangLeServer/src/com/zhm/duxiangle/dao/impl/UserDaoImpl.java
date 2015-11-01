@@ -8,6 +8,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.zhm.duxiangle.bean.User;
+import com.zhm.duxiangle.bean.UserInfo;
 import com.zhm.duxiangle.dao.UserDao;
 import com.zhm.duxiangle.utils.DaoUtils;
 import com.zhm.duxiangle.utils.MD5Util;
@@ -31,7 +32,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User findUserByUserName(String userName) {
+	public User getUserByUserName(String userName) {
 		// TODO Auto-generated method stub
 		if (runner == null) {
 			runner = new QueryRunner(DaoUtils.getSource());
@@ -87,5 +88,45 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public UserInfo getUserInfoByUserName(int userId) {
+		sql = "select * from userinfo where userId = ?";
+		try {
+			return runner.query(sql, new BeanHandler<>(UserInfo.class), userId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public boolean updateUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sql = "update userinfo set nickname=?,avatar=?,describ=?,created=? where userid=? and userinfoid=?";
+		try {
+			int i = runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getDescrib(),
+					userInfo.getCreated(), userInfo.getUserId(), userInfo.getUserinfoId());
+			if (i == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean insertUserInfo(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sql ="insert into userinfo values(null,?,?,?,?,?)";
+		
+//		runner.update(sql,);
+		return false;
 	}
 }

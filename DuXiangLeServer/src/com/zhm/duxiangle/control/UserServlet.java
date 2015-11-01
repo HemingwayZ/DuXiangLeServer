@@ -60,7 +60,7 @@ public class UserServlet extends HttpServlet {
 			out.print("password is null");
 			return;
 		}
-		User user = dao.findUserByUserName(username);
+		User user = dao.getUserByUserName(username);
 
 		if ("login".equals(action)) {
 			if (null == user) {
@@ -93,7 +93,7 @@ public class UserServlet extends HttpServlet {
 			boolean b = dao.registerUser(user);
 			if (b) {
 				// 若用户不存在
-				user = dao.findUserByUserName(username);
+				user = dao.getUserByUserName(username);
 				Gson gson = new Gson();
 				String json = gson.toJson(user);
 				out.println(json);

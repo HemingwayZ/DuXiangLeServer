@@ -3,6 +3,7 @@ package com.zhm.duxiangle.dao;
 import java.util.List;
 
 import com.zhm.duxiangle.bean.User;
+import com.zhm.duxiangle.bean.UserInfo;
 
 /**
  * 用户
@@ -19,7 +20,7 @@ public interface UserDao {
 	 * @param userName
 	 * @return
 	 */
-	public User findUserByUserName(String userName);
+	public User getUserByUserName(String userName);
 
 	/**
 	 * 增加（注册）用户
@@ -35,7 +36,25 @@ public interface UserDao {
 	 * @param username
 	 * @return
 	 */
-	public boolean updatePassword(String username,String password);
-	
-	
+	public boolean updatePassword(String username, String password);
+
+	/**
+	 * 根据用户的id获取用户的信息
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public UserInfo getUserInfoByUserName(int userId);
+	/**
+	 * 更新用户信息
+	 * @param userInfo
+	 * @return
+	 */
+	public boolean updateUserInfo(UserInfo userInfo);
+	/**
+	 * 增加用户详情信息
+	 * @param userInfo
+	 * @return
+	 */
+	public boolean insertUserInfo(UserInfo userInfo);
 }

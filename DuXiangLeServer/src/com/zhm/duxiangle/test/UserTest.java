@@ -1,6 +1,7 @@
 package com.zhm.duxiangle.test;
 
 import com.zhm.duxiangle.bean.User;
+import com.zhm.duxiangle.bean.UserInfo;
 import com.zhm.duxiangle.dao.UserDao;
 import com.zhm.duxiangle.dao.impl.UserDaoImpl;
 
@@ -11,6 +12,29 @@ public class UserTest {
 		
 		//将明文密码使用摘要算法进行加密
 //		register(dao);
+//		updatePassword(dao);
+//		getUserInfoByUserName(dao);
+//		updateUserInfo(dao);
+		
+	}
+
+	private static void updateUserInfo(UserDaoImpl dao) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserId(1);
+		userInfo.setUserinfoId(1);
+		userInfo.setDescrib("aaaa");
+		userInfo.setAvatar("http://localhost:8080/DuXiangLeServer/images/welcome-1.jpg");
+		userInfo.setCreated("2015-10-15");
+		userInfo.setNickname("庄海明");
+		System.out.println(dao.updateUserInfo(userInfo));
+	}
+
+	private static void getUserInfoByUserName(UserDaoImpl dao) {
+		UserInfo userInfo = dao.getUserInfoByUserName(1);
+		System.out.println(userInfo.getNickname());
+	}
+
+	private static void updatePassword(UserDaoImpl dao) {
 		boolean b =dao.updatePassword("q@qq.com", "qqqqqq");
 		if(b){
 			System.out.println("add success");
