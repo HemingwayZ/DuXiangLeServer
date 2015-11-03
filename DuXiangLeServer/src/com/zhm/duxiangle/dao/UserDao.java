@@ -45,16 +45,35 @@ public interface UserDao {
 	 * @return
 	 */
 	public UserInfo getUserInfoByUserName(int userId);
+
 	/**
 	 * 更新用户信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
 	public boolean updateUserInfo(UserInfo userInfo);
+
 	/**
 	 * 增加用户详情信息
+	 * 
 	 * @param userInfo
 	 * @return
 	 */
 	public boolean insertUserInfo(UserInfo userInfo);
+
+	/**
+	 * 分页获取用户信息
+	 * @param begin 开始位置（>=0）
+	 * @param rowPerPage 每页条数
+	 * @return
+	 */
+	public List<UserInfo> getUserInfoList(int begin,int rowPerPage);
+
+	/**
+	 * 获取用户总数
+	 * 
+	 * @return
+	 */
+	public int getUserCount();
 }

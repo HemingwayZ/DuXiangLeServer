@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.zhm.duxiangle.bean.User;
 import com.zhm.duxiangle.bean.UserInfo;
@@ -124,9 +125,34 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public boolean insertUserInfo(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		sql ="insert into userinfo values(null,?,?,?,?,?)";
-		
-//		runner.update(sql,);
+		sql = "insert into userinfo values(null,?,?,?,?,?)";
+
+		// runner.update(sql,);
 		return false;
+	}
+
+	@Override
+	public List<UserInfo> getUserInfoList(int thispage, int rowPerPage) {
+		// TODO Auto-generated method stub
+		sql = "select * from userinfo limit ?,?";
+		try {
+			return runner.query(sql, new BeanListHandler<UserInfo>(UserInfo.class), thispage, rowPerPage);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public int getUserCount() {
+		sql = "SELECT count(userinfoId) FROM duxiangle_db.userinfo";
+		try {
+			return ((Long) runner.query(sql, new ScalarHandler())).intValue();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }
