@@ -12,6 +12,7 @@ public class Book implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
+    private int bookId;
     private String id;//
     private String title;
     private String subtitle;
@@ -32,8 +33,62 @@ public class Book implements Serializable {
     private Series series;//
     private String pages;//
     private String image;
+    private int userId;
+    public int getBookId() {
+		return bookId;
+	}
 
-    //作者信息
+	public void setBookId(int bookId) {
+		this.bookId = bookId;
+	}
+
+
+
+	
+	public Book(int bookId, String id, String title, String subtitle, List<String> author, List<String> translator,
+			String price, String publisher, String catalog, String summary, String author_intro, String isbn10,
+			String isbn13, String url, String alt, Rating rating, Images images, Series series, String pages,
+			String image, int userId, String strAuthor, String strTranslator) {
+		super();
+		this.bookId = bookId;
+		this.id = id;
+		this.title = title;
+		this.subtitle = subtitle;
+		this.author = author;
+		this.translator = translator;
+		this.price = price;
+		this.publisher = publisher;
+		this.catalog = catalog;
+		this.summary = summary;
+		this.author_intro = author_intro;
+		this.isbn10 = isbn10;
+		this.isbn13 = isbn13;
+		this.url = url;
+		this.alt = alt;
+		this.rating = rating;
+		this.images = images;
+		this.series = series;
+		this.pages = pages;
+		this.image = image;
+		this.userId = userId;
+		this.strAuthor = strAuthor;
+		this.strTranslator = strTranslator;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public Book() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	//作者信息
     private String strAuthor;
     private String strTranslator;
 
