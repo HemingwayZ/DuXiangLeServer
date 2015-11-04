@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
+encoding//WebContent/PicUpload.jsp=UTF-8
 encoding//src/com/zhm/duxiangle/bean/Book.java=UTF-8
 encoding//src/com/zhm/duxiangle/bean/Images.java=UTF-8
 encoding//src/com/zhm/duxiangle/bean/Rating.java=UTF-8
 encoding//src/com/zhm/duxiangle/bean/Series.java=UTF-8
+encoding//src/io/rong/models/ChatroomInfo.java=UTF-8

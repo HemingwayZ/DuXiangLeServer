@@ -74,7 +74,11 @@ public class UserInfoServlet extends HttpServlet {
 			out.println(GsonUtil.toJson(userinfoPage));
 			return;
 		}
-
+		if("update".equals(action)){
+			//修改用户信息
+			
+			return;
+		}
 		String userId = request.getParameter("userid");
 		UserInfo userInfo = service.getUserInfoByUserId(userId);
 		if (null == userInfo) {

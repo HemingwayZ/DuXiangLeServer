@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 		int countrow = dao.getUserCount();
 		page.setCountrow(countrow);
 		// 4¡¢×ÜÒ³Êý
-		int countpage = countrow / rowperpage + (countrow % rowperpage == 0 ? 0 : 1);
+		int countpage = countrow / (rowperpage == 0 ? 1 : rowperpage) + ((countrow % rowperpage) == 0 ? 0 : 1);
 		page.setCountpage(countpage);
 		// 5¡¢Ê×Ò³
 		page.setFirstpage(1);

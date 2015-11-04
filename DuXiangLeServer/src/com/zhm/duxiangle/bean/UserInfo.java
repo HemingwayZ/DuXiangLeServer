@@ -14,6 +14,7 @@ public class UserInfo implements Serializable {
 	private String avatar;
 	private String created;
 	private String describ;
+	
 
 	public int getUserinfoId() {
 		return userinfoId;

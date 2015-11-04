@@ -58,12 +58,11 @@ public class FileUploadServlet extends HttpServlet {
 		fileUpload.setHeaderEncoding("UTF-8");
 		fileUpload.setFileSizeMax(1024 * 1024 * 3);//
 		fileUpload.setSizeMax(1024 * 1024 * 5);
-
+		System.out.println("upload:"+upload);
 		// 5、检查是否为正确的表单上传方式---enctype="multipart/form-data"
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			throw new RuntimeException("请使用正确的表单提交方式");
 		}
-
 		try {
 			List<FileItem> list = fileUpload.parseRequest(request);
 
@@ -76,17 +75,17 @@ public class FileUploadServlet extends HttpServlet {
 					String strUUID = UUID.randomUUID().toString();
 					if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif")) {
 						strUUID += "_picture" + name.substring(name.lastIndexOf("."));
-
 						// 设置文件输出流
 						try {
 							InputStream is = fileItem.getInputStream();// 获取文件流
 							OutputStream os = new FileOutputStream(new File(upload, strUUID));
-
 							// 将文件存储到服务器响应位置
 							IOUtils.In2Out(is, os);
 							IOUtils.close(is, os);
 							// 删除temp中缓存的文件
 							fileItem.delete();
+							
+							//将图片信息存储到数据库
 						} catch (Exception e) {
 							e.printStackTrace();
 							throw new RuntimeException("输出流异常");

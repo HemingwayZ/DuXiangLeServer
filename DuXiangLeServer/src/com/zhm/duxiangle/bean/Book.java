@@ -16,7 +16,7 @@ public class Book implements Serializable {
     private String title;
     private String subtitle;
     private List<String> author;//作者
-    private List<String> translator;//翻译 ������
+    private List<String> translator;//
     private String price;
     private String publisher;//
     private String catalog;//
