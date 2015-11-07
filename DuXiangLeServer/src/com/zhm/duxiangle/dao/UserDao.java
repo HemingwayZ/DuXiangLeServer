@@ -60,8 +60,15 @@ public interface UserDao {
 	 * @param userInfo
 	 * @return
 	 */
-	public boolean insertUserInfo(UserInfo userInfo);
+	public int insertUserInfo(UserInfo userInfo);
 
+	/**
+	 * 增加用户详情信息
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
+	public int insertUserInfoWithPicWall(UserInfo userInfo);
 	/**
 	 * 分页获取用户信息
 	 * @param begin 开始位置（>=0）
@@ -76,4 +83,13 @@ public interface UserDao {
 	 * @return
 	 */
 	public int getUserCount();
+	
+	public int updatePicWall(UserInfo userinfo);
+	/**
+	 * 根据用户id获取用户信息
+	 * @param userInfoId
+	 * @return
+	 */
+	public int findUserInfoByUserInfoId(String userInfoId);
+	
 }

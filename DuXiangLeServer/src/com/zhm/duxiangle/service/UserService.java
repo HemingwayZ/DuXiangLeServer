@@ -33,4 +33,14 @@ public interface UserService {
 	 * @return
 	 */
 	public int updateUserInfo(UserInfo userInfo);
+	
+	/**
+	 * ¸üÐÂÕÕÆ¬Ç½
+	 * @param userInfo
+	 * @return
+	 */
+	public int updatePicWall(UserInfo userInfo);
+	
+	public int updateUserInfoWithoutAvatar(UserInfo userInfo);
+	
 }

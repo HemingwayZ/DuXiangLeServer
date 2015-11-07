@@ -51,8 +51,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int updateUserInfo(UserInfo userInfo) {
+		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		if (info == null) {
+			return dao.insertUserInfo(userInfo);
+		} else {
+			return dao.updateUserInfo(userInfo);
+		}
+	}
 
-		return dao.updateUserInfo(userInfo);
+	@Override
+	public int updateUserInfoWithoutAvatar(UserInfo userInfo) {
+		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		if (info == null) {
+			return dao.insertUserInfo(userInfo);
+		} else {
+			return dao.updateUserInfo(userInfo);
+		}
+	}
+
+	@Override
+	public int updatePicWall(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		if (info == null) {
+			return dao.insertUserInfoWithPicWall(userInfo);
+		} else {
+			return dao.updatePicWall(userInfo);
+		}
 	}
 
 }

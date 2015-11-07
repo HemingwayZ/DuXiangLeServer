@@ -14,7 +14,16 @@ public class UserInfo implements Serializable {
 	private String avatar;
 	private String created;
 	private String describ;
+	private String picWall;//’’∆¨«Ω
 	
+
+	public String getPicWall() {
+		return picWall;
+	}
+
+	public void setPicWall(String picWall) {
+		this.picWall = picWall;
+	}
 
 	public int getUserinfoId() {
 		return userinfoId;

@@ -105,11 +105,11 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public int updateUserInfo(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		sql = "update userinfo set nickname=?,avatar=?,describ=?,created=? where userinfoid=?";
+		sql = "update userinfo set nickname=?,avatar=?,describ=?,created=? where userid=?";
 		System.out.println(userInfo.getUserinfoId());
 		try {
 			return runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getDescrib(),
-					userInfo.getCreated(), userInfo.getUserinfoId());
+					userInfo.getCreated(), userInfo.getUserId());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,12 +118,18 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean insertUserInfo(UserInfo userInfo) {
+	public int insertUserInfo(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		sql = "insert into userinfo values(null,?,?,?,?,?)";
+		sql = "insert into userinfo values(null,?,?,?,?,?,?)";
 
-		// runner.update(sql,);
-		return false;
+		try {
+			return runner.update(sql, userInfo.getUserId(), userInfo.getNickname(), userInfo.getPicWall(),
+					userInfo.getAvatar(), userInfo.getCreated(), userInfo.getDescrib());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
@@ -144,6 +150,48 @@ public class UserDaoImpl implements UserDao {
 		sql = "SELECT count(userinfoId) FROM duxiangle_db.userinfo";
 		try {
 			return ((Long) runner.query(sql, new ScalarHandler())).intValue();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int updatePicWall(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sql = "update userinfo set picWall = ? where userid=?";
+		System.out.println(userInfo.getUserinfoId());
+		try {
+			return runner.update(sql, userInfo.getPicWall(), userInfo.getUserId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int findUserInfoByUserInfoId(String userInfoId) {
+		// TODO Auto-generated method stub
+		sql = "select * from userinfo where userinfoid=?";
+
+		try {
+			runner.query(sql, new BeanHandler<UserInfo>(UserInfo.class), userInfoId);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int insertUserInfoWithPicWall(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sql = "insert into userinfo values(null,?,null,?,null,null,null)";
+
+		try {
+			return runner.update(sql, userInfo.getUserId(), userInfo.getPicWall());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
