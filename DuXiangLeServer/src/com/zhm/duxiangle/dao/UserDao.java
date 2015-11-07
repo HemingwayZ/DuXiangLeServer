@@ -52,7 +52,7 @@ public interface UserDao {
 	 * @param userInfo
 	 * @return
 	 */
-	public boolean updateUserInfo(UserInfo userInfo);
+	public int updateUserInfo(UserInfo userInfo);
 
 	/**
 	 * 增加用户详情信息

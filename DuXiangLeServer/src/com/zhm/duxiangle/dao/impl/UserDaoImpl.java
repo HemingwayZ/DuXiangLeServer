@@ -29,7 +29,6 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 
 	@Override
@@ -104,22 +103,18 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean updateUserInfo(UserInfo userInfo) {
+	public int updateUserInfo(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		sql = "update userinfo set nickname=?,avatar=?,describ=?,created=? where userid=? and userinfoid=?";
+		sql = "update userinfo set nickname=?,avatar=?,describ=?,created=? where userinfoid=?";
+		System.out.println(userInfo.getUserinfoId());
 		try {
-			int i = runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getDescrib(),
-					userInfo.getCreated(), userInfo.getUserId(), userInfo.getUserinfoId());
-			if (i == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getDescrib(),
+					userInfo.getCreated(), userInfo.getUserinfoId());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return 0;
 	}
 
 	@Override

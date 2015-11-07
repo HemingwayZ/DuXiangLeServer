@@ -74,20 +74,21 @@ public class UserInfoServlet extends HttpServlet {
 			out.println(GsonUtil.toJson(userinfoPage));
 			return;
 		}
-		if("update".equals(action)){
-			//修改用户信息
+		//获取用户信息
+		if("userinfo".equals(action)){
 			
+			String userId = request.getParameter("userid");
+			UserInfo userInfo = service.getUserInfoByUserId(userId);
+			if (null == userInfo) {
+				out.println("no found");
+				return;
+			}
+			Gson gson = new Gson();
+			String json = gson.toJson(userInfo);
+			out.println(json);
+//			service
 			return;
 		}
-		String userId = request.getParameter("userid");
-		UserInfo userInfo = service.getUserInfoByUserId(userId);
-		if (null == userInfo) {
-			out.println("no found");
-			return;
-		}
-		Gson gson = new Gson();
-		String json = gson.toJson(userInfo);
-		out.println(json);
 	}
 
 	/**

@@ -26,4 +26,11 @@ public interface UserService {
 	 * @return
 	 */
 	public Page  getUserInfoListByPage(int begin, int rowperpage);
+	
+	/**
+	 * 更新用户信息
+	 * @param userInfo
+	 * @return
+	 */
+	public int updateUserInfo(UserInfo userInfo);
 }

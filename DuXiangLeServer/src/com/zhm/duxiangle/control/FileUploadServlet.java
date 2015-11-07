@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import com.zhm.duxiangle.bean.UserInfo;
+import com.zhm.duxiangle.service.UserService;
+import com.zhm.duxiangle.service.impl.UserServiceImpl;
 import com.zhm.duxiangle.utils.IOUtils;
+import com.zhm.duxiangle.utils.TextUtils;
 
 /**
  * Servlet implementation class ileUploadServlet
@@ -46,10 +51,11 @@ public class FileUploadServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=utf-8");
+		
 		// 设置存储位置
 		String upload = this.getServletContext().getRealPath("/upload");
 		String temp = this.getServletContext().getRealPath("/temp");
-
+		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(1024 * 5);// 100k--进入缓存的入口大小
 		factory.setRepository(new File(temp));
@@ -75,6 +81,7 @@ public class FileUploadServlet extends HttpServlet {
 					String strUUID = UUID.randomUUID().toString();
 					if (name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif")) {
 						strUUID += "_picture" + name.substring(name.lastIndexOf("."));
+					
 						// 设置文件输出流
 						try {
 							InputStream is = fileItem.getInputStream();// 获取文件流
@@ -101,6 +108,8 @@ public class FileUploadServlet extends HttpServlet {
 		}
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
+
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse

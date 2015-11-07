@@ -57,13 +57,21 @@ public class IoRongServlet extends HttpServlet {
 		}
 		UserInfo userInfo = service.getUserInfoByUserId(userid);
 		String portraitUri = "";
+		String id=userid;
+		String name;
+		if(userInfo==null){
+			name="";
+			
+		}else{
+			name=userInfo.getNickname();
+		}
 		try {
 			SdkHttpResult sdkHttpResult = ApiHttpClient.getToken(appKey, appSecret,
-					String.valueOf(userInfo.getUserId()), userInfo.getNickname(), portraitUri, FormatType.json);
+					id,name, portraitUri, FormatType.json);
 			String json = GsonUtil.toJson(sdkHttpResult, new TypeToken<SdkHttpResult>() {
 			}.getType());
 			out.println(json);
-
+			System.out.println("userid:"+userid+":token"+json);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
