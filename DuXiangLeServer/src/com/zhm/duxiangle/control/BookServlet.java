@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.reflect.TypeToken;
 import com.zhm.duxiangle.bean.Book;
+import com.zhm.duxiangle.bean.Page;
 import com.zhm.duxiangle.service.BookService;
 import com.zhm.duxiangle.service.impl.BookServiceImpl;
 import com.zhm.duxiangle.utils.TextUtils;
@@ -55,12 +56,41 @@ public class BookServlet extends HttpServlet {
 		}
 		if ("books".equals(action)) {
 			String userId = request.getParameter("userId");
-			System.out.println("books--userId:"+userId);
+			System.out.println("books--userId:" + userId);
 			List<Book> books = service.getBooks(userId);
 			String json = GsonUtil.toJson(books);
 			out.println(json);
 			return;
 
+		}
+		if ("pagebooks".equals(action)) {
+			// 分页获取书籍信息
+			String userId = request.getParameter("userid");
+			String thispage = request.getParameter("thispage");
+			String rowperpage = request.getParameter("rowperpage");
+			if (TextUtils.isEmpty(userId)) {
+				out.println("userid is null");
+				return;
+			}
+			int iThispage = 0;
+			int iRowperpage = 1;
+			if (TextUtils.isEmpty(thispage)) {
+				iThispage = 0;
+			} else {
+				iThispage = Integer.valueOf(thispage);
+
+			}
+			if (TextUtils.isEmpty(rowperpage)) {
+				iRowperpage = 1;
+			} else {
+				iRowperpage = Integer.valueOf(rowperpage);
+			}
+
+			System.out.println("books--userId:" + userId + "  thispage rowperpage=" + iThispage + "--" + iRowperpage);
+			Page page = service.getBooksByPage(userId, iThispage, iRowperpage);
+			String json = GsonUtil.toJson(page);
+			out.println(json);
+			return;
 		}
 		if ("save_book".equals(action)) {
 			String json = request.getParameter("book");
@@ -78,6 +108,18 @@ public class BookServlet extends HttpServlet {
 				return;
 			}
 			out.print("success");
+		}
+		if ("removebook".endsWith(action)) {
+			String userid = request.getParameter("userid");
+			String bookid = request.getParameter("bookid");
+			System.out.println(userid+" -- "+bookid);
+			out.println(service.removeBook(userid, bookid));
+		}
+		if("searchbook".equals(action)){
+			//查找
+			String keywords = request.getParameter("keywords");
+			Page bookPage = service.searchBookByKeyWords(keywords,0,20);
+			out.println(GsonUtil.toJson(bookPage));
 		}
 		out.flush();
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import com.zhm.duxiangle.bean.Book;
 import com.zhm.duxiangle.bean.Page;
@@ -55,6 +56,68 @@ public class BookDaoImpl implements BookDao {
 
 		try {
 			return runner.query(sql, new BeanHandler<Book>(Book.class), id);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public int getBooksCount(String userid) {
+		sql = "select count(*) from book where userid=?";
+		try {
+			return ((Long) (runner.query(sql, new ScalarHandler(), userid))).intValue();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Book> getBooks(String userId, int thispage, int rowperpage) {
+		sql = "select * from book where userId = ? limit ?,?";
+
+		try {
+			return runner.query(sql, new BeanListHandler<Book>(Book.class), userId, thispage, rowperpage);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public int removeBook(int userid, int bookid) {
+		sql = "delete from book where userid = ? and bookid = ?";
+
+		try {
+			return runner.update(sql, userid, bookid);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int getBooksCountByKeyWords(String keywords) {
+		sql = "select count(*) from book where title like %?%";
+		try {
+			return ((Long) (runner.query(sql, new ScalarHandler(), keywords))).intValue();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public List<Book> getBooksByKeyWords(String keywords, int thispage, int rowperpage) {
+		sql = "select * from book where title like %?% limit ?,?";
+
+		try {
+			return runner.query(sql, new BeanListHandler<Book>(Book.class), keywords, thispage, rowperpage);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

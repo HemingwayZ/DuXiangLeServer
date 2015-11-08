@@ -16,8 +16,32 @@ public interface BookDao {
 	 * @return
 	 */
 	public List<Book> getBooks(int userId);
+
+	/**
+	 * 根据用户id获取书籍列表
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public List<Book> getBooks(String userId, int thispage, int rowperpage);
+
 	/*
 	 * 根据书籍id获取书籍信息
 	 */
 	public Book getBookById(String id);
+
+	public int getBooksCount(String userid);
+
+	/**
+	 * 根据用户id和书的id从书库删除数据操作
+	 * 
+	 * @param userid
+	 * @param bookid
+	 * @return
+	 */
+	public int removeBook(int userid, int bookid);
+
+	public int getBooksCountByKeyWords(String keywords);
+
+	public List<Book> getBooksByKeyWords(String keywords, int thispage, int rowperpage);
 }

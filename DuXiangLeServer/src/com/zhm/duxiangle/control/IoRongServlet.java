@@ -61,10 +61,10 @@ public class IoRongServlet extends HttpServlet {
 		String name;
 		if (userInfo == null) {
 			name = userid;
-			portraitUri = "http://192.169.23.1:8080/DuXiangLeServer/images/welcome-1.jpg";
+			portraitUri = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1183223528,3058066243&fm=116&gp=0.jpg";
 		} else {
 			name = userInfo.getNickname();
-			portraitUri = "http://192.169.23.1:8080" + userInfo.getAvatar();
+			portraitUri = "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1183223528,3058066243&fm=116&gp=0.jpg";
 		}
 		try {
 			SdkHttpResult sdkHttpResult = ApiHttpClient.getToken(appKey, appSecret, id, name, portraitUri,
