@@ -101,10 +101,11 @@ public class BookDaoImpl implements BookDao {
 	}
 
 	@Override
-	public int getBooksCountByKeyWords(String keywords) {
-		sql = "select count(*) from book where title like %?%";
+	public int getBooksCountByKeyWords(String userid, String keywords) {
+		keywords = "%" + keywords + "%";
+		sql = "select count(*) from book where title like ? or strauthor like ? or subtitle like ? or publisher like ? and userid =?";
 		try {
-			return ((Long) (runner.query(sql, new ScalarHandler(), keywords))).intValue();
+			return ((Long) (runner.query(sql, new ScalarHandler(), keywords, keywords, keywords, keywords, userid))).intValue();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,11 +114,12 @@ public class BookDaoImpl implements BookDao {
 	}
 
 	@Override
-	public List<Book> getBooksByKeyWords(String keywords, int thispage, int rowperpage) {
-		sql = "select * from book where title like %?% limit ?,?";
+	public List<Book> getBooksByKeyWords(String userid, String keywords, int thispage, int rowperpage) {
+		keywords = "%" + keywords + "%";
+		sql = "select * from book where title like ? or strauthor like ? or subtitle like ? or publisher like ? and userid =? limit ?,?";
 
 		try {
-			return runner.query(sql, new BeanListHandler<Book>(Book.class), keywords, thispage, rowperpage);
+			return runner.query(sql, new BeanListHandler<Book>(Book.class),keywords,keywords,keywords,keywords, userid, thispage, rowperpage);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

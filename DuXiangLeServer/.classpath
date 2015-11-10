@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-io-2.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/google-http-client-1.10.3-beta.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

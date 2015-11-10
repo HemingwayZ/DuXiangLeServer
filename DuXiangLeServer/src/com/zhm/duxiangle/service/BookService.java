@@ -38,6 +38,6 @@ public interface BookService {
 	 */
 	public int removeBook(String userid,String bookid);
 
-	public Page searchBookByKeyWords(String keywords,int thispage,int rowperpage);
+	public Page searchBookByKeyWords(String userid,String keywords,int thispage,int rowperpage);
 	
 }

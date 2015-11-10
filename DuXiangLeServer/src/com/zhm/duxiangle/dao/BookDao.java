@@ -41,7 +41,7 @@ public interface BookDao {
 	 */
 	public int removeBook(int userid, int bookid);
 
-	public int getBooksCountByKeyWords(String keywords);
+	public int getBooksCountByKeyWords(String userid,String keywords);
 
-	public List<Book> getBooksByKeyWords(String keywords, int thispage, int rowperpage);
+	public List<Book> getBooksByKeyWords(String userid,String keywords, int thispage, int rowperpage);
 }

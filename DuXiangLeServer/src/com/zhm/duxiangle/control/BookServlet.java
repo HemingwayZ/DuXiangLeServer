@@ -26,6 +26,7 @@ import io.rong.util.GsonUtil;
 @WebServlet("/BookServlet")
 public class BookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private boolean isDoPost = false;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -45,6 +46,7 @@ public class BookServlet extends HttpServlet {
 		// response.sendRedirect("https://api.douban.com/v2/book/isbn/:9787111348665");
 
 		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		BookService service = new BookServiceImpl();
@@ -112,13 +114,34 @@ public class BookServlet extends HttpServlet {
 		if ("removebook".endsWith(action)) {
 			String userid = request.getParameter("userid");
 			String bookid = request.getParameter("bookid");
-			System.out.println(userid+" -- "+bookid);
+			System.out.println(userid + " -- " + bookid);
 			out.println(service.removeBook(userid, bookid));
 		}
-		if("searchbook".equals(action)){
-			//≤È’“
+		if ("searchbook".equals(action)) {
+			// ≤È’“
+
 			String keywords = request.getParameter("keywords");
-			Page bookPage = service.searchBookByKeyWords(keywords,0,20);
+			String userid = request.getParameter("userid");
+			String thispage = request.getParameter("thispage");
+			String rowperpage = request.getParameter("rowperpage");
+			if (TextUtils.isEmpty(userid)) {
+				out.println("userid is null");
+				return;
+			}
+			if (isDoPost==false) {
+				keywords = new String(keywords.getBytes("ISO-8859-1"), "UTF-8");
+			}
+			int iThispage = 0;
+			int iRowperpage = 4;
+			if (!TextUtils.isEmpty(thispage)) {
+				iThispage = Integer.valueOf(thispage);
+			}
+			if (!TextUtils.isEmpty(rowperpage)) {
+				iRowperpage = Integer.valueOf(rowperpage);
+			}
+			System.out.println("keywords:" + keywords);
+			Page bookPage = service.searchBookByKeyWords(userid, keywords, iThispage, iRowperpage);
+			
 			out.println(GsonUtil.toJson(bookPage));
 		}
 		out.flush();
@@ -131,6 +154,7 @@ public class BookServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		isDoPost = true;
 		doGet(request, response);
 	}
 

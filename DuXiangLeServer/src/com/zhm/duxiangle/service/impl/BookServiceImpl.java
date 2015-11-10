@@ -46,8 +46,9 @@ public class BookServiceImpl implements BookService {
 		// 3、总记录数
 		int countrow = dao.getBooksCount(userid);
 		page.setCountrow(countrow);
+		rowperpage = rowperpage == 0 ? 1 : rowperpage;
 		// 4、总页数
-		int countpage = countrow / (rowperpage == 0 ? 1 : rowperpage) + ((countrow % rowperpage) == 0 ? 0 : 1);
+		int countpage = countrow / rowperpage + ((countrow % rowperpage) == 0 ? 0 : 1);
 		page.setCountpage(countpage);
 		// 5、首页
 		page.setFirstpage(1);
@@ -66,39 +67,39 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public int removeBook(String userid, String bookid) {
 		// TODO Auto-generated method stub
-		if(TextUtils.isEmpty(bookid)||TextUtils.isEmpty(userid)){
-			
+		if (TextUtils.isEmpty(bookid) || TextUtils.isEmpty(userid)) {
+
 			return 0;
 		}
 		return dao.removeBook(Integer.valueOf(userid), Integer.valueOf(bookid));
 	}
 
 	@Override
-	public Page searchBookByKeyWords(String keywords,int thispage,int rowperpage) {
+	public Page searchBookByKeyWords(String userid,String keywords, int thispage, int rowperpage) {
 		// TODO Auto-generated method stub
-				Page page = new Page();
-				// 1、当前页面页码
-				page.setThispage(thispage);
-				// 2、每页记录数
-				page.setRowperpage(rowperpage);
-				// 3、总记录数
-				int countrow = dao.getBooksCountByKeyWords(keywords);
-				page.setCountrow(countrow);
-				// 4、总页数
-				int countpage = countrow / (rowperpage == 0 ? 1 : rowperpage) + ((countrow % rowperpage) == 0 ? 0 : 1);
-				page.setCountpage(countpage);
-				// 5、首页
-				page.setFirstpage(1);
-				// 6、尾页
-				page.setLastpage(countpage);
-				// 7、上一页
-				page.setPrepage(thispage == 0 ? 0 : thispage - 1);
-				// 8、下一页
-				page.setNextpage(thispage == countpage ? countpage : thispage + 1);
-				// 9、每页内容--客户
-				List<Book> book = dao.getBooksByKeyWords(keywords, thispage, rowperpage);
-				page.setList(book);
-				return page;
+		Page page = new Page();
+		// 1、当前页面页码
+		page.setThispage(thispage);
+		// 2、每页记录数
+		page.setRowperpage(rowperpage);
+		// 3、总记录数
+		int countrow = dao.getBooksCountByKeyWords(userid,keywords);
+		page.setCountrow(countrow);
+		// 4、总页数
+		int countpage = countrow / (rowperpage == 0 ? 1 : rowperpage) + ((countrow % rowperpage) == 0 ? 0 : 1);
+		page.setCountpage(countpage);
+		// 5、首页
+		page.setFirstpage(1);
+		// 6、尾页
+		page.setLastpage(countpage);
+		// 7、上一页
+		page.setPrepage(thispage == 0 ? 0 : thispage - 1);
+		// 8、下一页
+		page.setNextpage(thispage == countpage ? countpage : thispage + 1);
+		// 9、每页内容--客户
+		List<Book> book = dao.getBooksByKeyWords(userid,keywords, thispage, rowperpage);
+		page.setList(book);
+		return page;
 	}
 
 }
