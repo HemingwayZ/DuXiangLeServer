@@ -80,12 +80,11 @@ public class UpdatePicWallServlet extends HttpServlet {
 				if (fileItem.isFormField()) {
 					// 获取字段
 					String filedName = fileItem.getFieldName();
-					
-					
+
 					if ("userid".equals(filedName)) {
-						if(TextUtils.isEmpty(fileItem.getString())){
+						if (TextUtils.isEmpty(fileItem.getString())) {
 							out.print("userid is null");
-							return ;
+							return;
 						}
 						System.out.println("userid：" + fileItem.getString());
 						userInfo.setUserId(Integer.valueOf(fileItem.getString()));
@@ -106,12 +105,12 @@ public class UpdatePicWallServlet extends HttpServlet {
 							IOUtils.close(is, os);
 							// 删除temp中缓存的文件
 							fileItem.delete();
-							
-							System.out.println("request.getContextPath()"+request.getContextPath());
-							avatar=request.getContextPath()+"/upload/"+strUUID;
+
+							System.out.println("request.getContextPath()" + request.getContextPath());
+							avatar = request.getContextPath() + "/upload/" + strUUID;
 							userInfo.setPicWall(avatar);
-							System.out.println("avatar:"+avatar);
-							updatePicWall(userInfo);
+							System.out.println("avatar:" + avatar);
+							updatePicWall(userInfo, upload);
 							// 将图片信息存储到数据库
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -131,8 +130,19 @@ public class UpdatePicWallServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	private int updatePicWall(UserInfo userInfo) {
+	private int updatePicWall(UserInfo userInfo, String string) {
 		UserService service = new UserServiceImpl();
+		UserInfo userInfoByUserId = service.getUserInfoByUserId(String.valueOf(userInfo.getUserId()));
+		if (!TextUtils.isEmpty(userInfoByUserId.getPicWall())) {
+			String wall = userInfoByUserId.getPicWall();
+			wall = string + wall.substring(wall.lastIndexOf("/"));
+			System.out.println("avatar:" + wall);
+			File file = new File(wall);
+			System.out.println(file.getPath());
+			if (file.exists()) {
+				System.out.println("删除：" + file.delete());
+			}
+		}
 		return service.updatePicWall(userInfo);
 	}
 

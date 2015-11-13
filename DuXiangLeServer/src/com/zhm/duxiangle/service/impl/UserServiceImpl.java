@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		if (info == null) {
 			return dao.insertUserInfo(userInfo);
 		} else {
-			return dao.updateUserInfo(userInfo);
+			return dao.updateUserInfoWithoutAvatar(userInfo);
 		}
 	}
 

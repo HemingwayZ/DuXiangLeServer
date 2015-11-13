@@ -58,16 +58,29 @@ public class UpdateUserInfoServlet extends HttpServlet {
 
 		// 5、检查是否为正确的表单上传方式---enctype="multipart/form-data"
 		if (!ServletFileUpload.isMultipartContent(request)) {
+			System.out.println("无图片修改资料");
 			String userid = request.getParameter("userid");
 			String nickname = request.getParameter("nickname");
 			String created = request.getParameter("created");
 			String describ = request.getParameter("describ");
 			UserInfo userInfo = new UserInfo();
+			if (TextUtils.isEmpty(userid)) {
+				out.print("userid is null");
+				return;
+			}
 			userInfo.setUserId(Integer.valueOf(userid));
 			userInfo.setNickname(nickname == null ? "" : nickname);
 			userInfo.setCreated(created == null ? "" : created);
 			userInfo.setDescrib(describ == null ? "" : describ);
 			UserService service = new UserServiceImpl();
+			UserInfo userInfoByUserId = service.getUserInfoByUserId(String.valueOf(userInfo.getUserId()));
+			if (!TextUtils.isEmpty(userInfoByUserId.getAvatar())) {
+				File file = new File(request.getContextPath() + userInfoByUserId.getAvatar());
+				System.out.println(file.toString());
+				if (file.exists()) {
+					file.delete();
+				}
+			}
 			service.updateUserInfoWithoutAvatar(userInfo);
 			out.println("请使用正确的表单提交方式");
 			return;
@@ -132,11 +145,13 @@ public class UpdateUserInfoServlet extends HttpServlet {
 							// 删除temp中缓存的文件
 							fileItem.delete();
 
-							System.out.println("request.getContextPath()" + request.getContextPath());
+							System.out.println("request.getContextPath()" + upload);
 							avatar = request.getContextPath() + "/upload/" + strUUID;
+
+							
 							userInfo.setAvatar(avatar);
 							System.out.println("avatar:" + avatar);
-							updateUserInfo(userInfo);
+							updateUserInfo(userInfo, upload);
 							// 将图片信息存储到数据库
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -157,8 +172,20 @@ public class UpdateUserInfoServlet extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	private int updateUserInfo(UserInfo userInfo) {
+	private int updateUserInfo(UserInfo userInfo, String string) {
+
 		UserService service = new UserServiceImpl();
+		UserInfo userInfoByUserId = service.getUserInfoByUserId(String.valueOf(userInfo.getUserId()));
+		if (!TextUtils.isEmpty(userInfoByUserId.getAvatar())) {
+			String avatar = userInfoByUserId.getAvatar();
+			avatar = string+avatar.substring(avatar.lastIndexOf("/"));
+			System.out.println("avatar:"+avatar);
+			File file = new File(avatar);
+			System.out.println(file.getPath());
+			if (file.exists()) {
+				System.out.println("删除：" + file.delete());
+			}
+		}
 		return service.updateUserInfo(userInfo);
 	}
 

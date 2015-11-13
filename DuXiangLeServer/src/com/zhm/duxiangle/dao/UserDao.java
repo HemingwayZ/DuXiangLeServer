@@ -91,5 +91,7 @@ public interface UserDao {
 	 * @return
 	 */
 	public int findUserInfoByUserInfoId(String userInfoId);
+
+	int updateUserInfoWithoutAvatar(UserInfo userInfo);
 	
 }

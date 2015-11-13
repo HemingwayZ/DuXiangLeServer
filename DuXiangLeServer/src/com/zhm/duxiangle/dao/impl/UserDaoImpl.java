@@ -133,6 +133,22 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
+	public int updateUserInfoWithoutAvatar(UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		sql = "update userinfo set nickname=?,describ=?,created=? where userid=?";
+		System.out.println(userInfo.getUserinfoId());
+		try {
+			return runner.update(sql, userInfo.getNickname(), userInfo.getDescrib(),
+					userInfo.getCreated(), userInfo.getUserId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+
+	@Override
 	public List<UserInfo> getUserInfoList(int thispage, int rowPerPage) {
 		// TODO Auto-generated method stub
 		sql = "select * from userinfo limit ?,?";
