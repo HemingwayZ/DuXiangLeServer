@@ -28,7 +28,7 @@ public interface BookDao {
 	/*
 	 * 根据书籍id获取书籍信息
 	 */
-	public Book getBookById(String id);
+	public Book getBookById(String id,int userid);
 
 	public int getBooksCount(String userid);
 

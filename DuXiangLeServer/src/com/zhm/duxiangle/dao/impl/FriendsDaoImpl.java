@@ -92,8 +92,7 @@ public class FriendsDaoImpl implements FriendsDao {
 			list2.add(String.valueOf(list.get(i).getFriendid()));
 			sql += " or userid = ?";
 		}
-		System.out.println("getFriendsInfo:" + sql);
-
+//		System.out.println("getFriendsInfo:" + sql);
 		try {
 			return runner.query(sql, list2.toArray(), new BeanListHandler<UserInfo>(UserInfo.class));
 		} catch (SQLException e) {

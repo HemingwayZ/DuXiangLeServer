@@ -80,17 +80,22 @@ public class FriendsServlet extends HttpServlet {
 			return;
 		}
 		if ("add_friend".equals(action)) {
-
+			System.out.println("调用增加好友api：" + userid);
 			int i = dao.addFriends(Integer.valueOf(userid), Integer.valueOf(friendid));
 			out.print(i);
 			return;
 		}
 		if ("remove_friend".equals(action)) {
-
+			System.out.println("调用删除好友api：" + userid);
 			boolean removeMyFriend = dao.removeMyFriend(Integer.valueOf(userid), Integer.valueOf(friendid));
 			out.print(removeMyFriend);
+			return;
 		}
-		
+		if ("is_my_friend".equals(action)) {
+			boolean myFriends = dao.isMyFriends(Integer.valueOf(userid), Integer.valueOf(friendid));
+			out.print(myFriends);
+			return;
+		}
 
 	}
 

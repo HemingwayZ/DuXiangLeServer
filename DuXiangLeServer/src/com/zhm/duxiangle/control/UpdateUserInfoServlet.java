@@ -148,7 +148,6 @@ public class UpdateUserInfoServlet extends HttpServlet {
 							System.out.println("request.getContextPath()" + upload);
 							avatar = request.getContextPath() + "/upload/" + strUUID;
 
-							
 							userInfo.setAvatar(avatar);
 							System.out.println("avatar:" + avatar);
 							updateUserInfo(userInfo, upload);
@@ -176,14 +175,16 @@ public class UpdateUserInfoServlet extends HttpServlet {
 
 		UserService service = new UserServiceImpl();
 		UserInfo userInfoByUserId = service.getUserInfoByUserId(String.valueOf(userInfo.getUserId()));
-		if (!TextUtils.isEmpty(userInfoByUserId.getAvatar())) {
-			String avatar = userInfoByUserId.getAvatar();
-			avatar = string+avatar.substring(avatar.lastIndexOf("/"));
-			System.out.println("avatar:"+avatar);
-			File file = new File(avatar);
-			System.out.println(file.getPath());
-			if (file.exists()) {
-				System.out.println("删除：" + file.delete());
+		if (userInfoByUserId != null) {//若未新用户则无法进入
+			if (!TextUtils.isEmpty(userInfoByUserId.getAvatar())) {
+				String avatar = userInfoByUserId.getAvatar();
+				avatar = string + avatar.substring(avatar.lastIndexOf("/"));
+				System.out.println("avatar:" + avatar);
+				File file = new File(avatar);
+				System.out.println(file.getPath());
+				if (file.exists()) {
+					System.out.println("删除：" + file.delete());
+				}
 			}
 		}
 		return service.updateUserInfo(userInfo);

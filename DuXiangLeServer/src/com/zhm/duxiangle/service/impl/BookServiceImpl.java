@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
 		if (book == null) {
 			return 0;
 		}
-		Book book2 = dao.getBookById(book.getId());
+		Book book2 = dao.getBookById(book.getId(),book.getUserId());
 		if (book2 != null) {
 			return 0;
 		}

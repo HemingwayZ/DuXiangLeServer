@@ -12,6 +12,7 @@ import com.zhm.duxiangle.bean.Book;
 import com.zhm.duxiangle.bean.Page;
 import com.zhm.duxiangle.dao.BookDao;
 import com.zhm.duxiangle.utils.DaoUtils;
+import com.zhm.duxiangle.utils.TextUtils;
 
 public class BookDaoImpl implements BookDao {
 	String sql = "";
@@ -50,12 +51,12 @@ public class BookDaoImpl implements BookDao {
 	}
 
 	@Override
-	public Book getBookById(String id) {
+	public Book getBookById(String id,int userid) {
 		// TODO Auto-generated method stub
-		sql = "select * from book where id = ?";
+		sql = "select * from book where id = ? and userid = ?";
 
 		try {
-			return runner.query(sql, new BeanHandler<Book>(Book.class), id);
+			return runner.query(sql, new BeanHandler<Book>(Book.class), id,userid);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,10 +103,18 @@ public class BookDaoImpl implements BookDao {
 
 	@Override
 	public int getBooksCountByKeyWords(String userid, String keywords) {
-		keywords = "%" + keywords + "%";
-		sql = "select count(*) from book where title like ? or strauthor like ? or subtitle like ? or publisher like ? and userid =?";
+		
 		try {
-			return ((Long) (runner.query(sql, new ScalarHandler(), keywords, keywords, keywords, keywords, userid))).intValue();
+			if(TextUtils.isEmpty(keywords)){
+				sql = "select count(*) from book where userid =?";
+				return ((Long) (runner.query(sql, new ScalarHandler(), userid))).intValue();
+			}else{
+			keywords = "%" + keywords + "%";
+			//or strauthor like ? or subtitle like ? or publisher like ?
+			sql = "select count(*) from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =?";
+			}
+			//, keywords, keywords, keywords
+			return ((Long) (runner.query(sql, new ScalarHandler(), keywords, userid))).intValue();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,11 +124,19 @@ public class BookDaoImpl implements BookDao {
 
 	@Override
 	public List<Book> getBooksByKeyWords(String userid, String keywords, int thispage, int rowperpage) {
-		keywords = "%" + keywords + "%";
-		sql = "select * from book where title like ? or strauthor like ? or subtitle like ? or publisher like ? and userid =? limit ?,?";
-
+		
 		try {
-			return runner.query(sql, new BeanListHandler<Book>(Book.class),keywords,keywords,keywords,keywords, userid, thispage, rowperpage);
+			if(TextUtils.isEmpty(keywords)){
+				sql = "select * from book where userid =? limit ?,?";
+				return runner.query(sql, new BeanListHandler<Book>(Book.class), userid, thispage, rowperpage);
+
+			}else{
+			keywords = "%" + keywords + "%";
+			//or strauthor like ? or subtitle like ? or publisher like ?
+			sql = "select * from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =? limit ?,?";
+			}
+			//,keywords,keywords,keywords
+			return runner.query(sql, new BeanListHandler<Book>(Book.class),keywords, userid, thispage, rowperpage);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
