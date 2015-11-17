@@ -138,15 +138,14 @@ public class UserDaoImpl implements UserDao {
 		sql = "update userinfo set nickname=?,describ=?,created=? where userid=?";
 		System.out.println(userInfo.getUserinfoId());
 		try {
-			return runner.update(sql, userInfo.getNickname(), userInfo.getDescrib(),
-					userInfo.getCreated(), userInfo.getUserId());
+			return runner.update(sql, userInfo.getNickname(), userInfo.getDescrib(), userInfo.getCreated(),
+					userInfo.getUserId());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
 	}
-
 
 	@Override
 	public List<UserInfo> getUserInfoList(int thispage, int rowPerPage) {
@@ -213,5 +212,18 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	@Override
+	public List<UserInfo> findUserInfoByKeyWords(String keywords) {
+		keywords = "%" + keywords + "%";
+		sql = "select * from userinfo where nickname like ?";
+		try {
+			return runner.query(sql, new BeanListHandler<UserInfo>(UserInfo.class), keywords);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

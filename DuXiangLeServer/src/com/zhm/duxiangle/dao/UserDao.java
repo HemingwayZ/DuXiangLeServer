@@ -93,5 +93,7 @@ public interface UserDao {
 	public int findUserInfoByUserInfoId(String userInfoId);
 
 	int updateUserInfoWithoutAvatar(UserInfo userInfo);
+
+	public List<UserInfo> findUserInfoByKeyWords(String keywords);
 	
 }

@@ -2,6 +2,7 @@ package com.zhm.duxiangle.control;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +27,7 @@ import io.rong.util.GsonUtil;
 @WebServlet("/UserInfoServlet")
 public class UserInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private boolean isDoPost;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -74,9 +76,9 @@ public class UserInfoServlet extends HttpServlet {
 			out.println(GsonUtil.toJson(userinfoPage));
 			return;
 		}
-		//获取用户信息
-		if("userinfo".equals(action)){
-			
+		// 获取用户信息
+		if ("userinfo".equals(action)) {
+
 			String userId = request.getParameter("userid");
 			UserInfo userInfo = service.getUserInfoByUserId(userId);
 			if (null == userInfo) {
@@ -86,7 +88,22 @@ public class UserInfoServlet extends HttpServlet {
 			Gson gson = new Gson();
 			String json = gson.toJson(userInfo);
 			out.println(json);
-//			service
+			// service
+			return;
+		}
+		if ("search_user".equals(action)) {
+			String keywords = request.getParameter("keywords");
+			if (TextUtils.isEmpty(keywords)) {
+				out.println("keywords is null");
+				return;
+			}
+			if (isDoPost == false) {
+				keywords = new String(keywords.getBytes("ISO-8859-1"), "UTF-8");
+			}
+			System.out.println("正载搜索:" + keywords);
+			List<UserInfo> userinfoList = service.findUserInfoByKeyWords(keywords);
+			String json = GsonUtil.toJson(userinfoList);
+			out.println(json);
 			return;
 		}
 	}
@@ -98,6 +115,7 @@ public class UserInfoServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		isDoPost = true;
 		doGet(request, response);
 	}
 

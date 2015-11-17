@@ -42,5 +42,11 @@ public interface UserService {
 	public int updatePicWall(UserInfo userInfo);
 	
 	public int updateUserInfoWithoutAvatar(UserInfo userInfo);
+	/**
+	 * ÓÃ»§ËÑË÷
+	 * @param keywords
+	 * @return
+	 */
+	public List<UserInfo> findUserInfoByKeyWords(String keywords);
 	
 }

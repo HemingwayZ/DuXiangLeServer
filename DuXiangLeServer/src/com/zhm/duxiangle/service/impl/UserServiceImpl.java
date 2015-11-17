@@ -80,4 +80,11 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public List<UserInfo> findUserInfoByKeyWords(String keywords) {
+		// TODO Auto-generated method stub
+		
+		return dao.findUserInfoByKeyWords(keywords);
+	}
+
 }

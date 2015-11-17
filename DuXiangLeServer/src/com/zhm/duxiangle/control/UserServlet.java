@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.security.MD5Encoder;
 
@@ -48,6 +49,13 @@ public class UserServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		// HttpSession session=request.getSession(true);
+		// String strCode = (String) session.getAttribute("code");
+		String strCode = request.getParameter("code");
+		// String strCode =
+		// request.getSession().getAttribute("code").toString();
+
+		System.out.println("code:" + strCode);
 		if (TextUtils.isEmpty(action)) {
 			out.println("error action");
 			return;
@@ -130,7 +138,7 @@ public class UserServlet extends HttpServlet {
 				}
 			}
 
-		} else {
+		}  else {
 			out.println("error action");
 		}
 	}
