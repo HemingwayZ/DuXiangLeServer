@@ -100,7 +100,7 @@ public class UserInfoServlet extends HttpServlet {
 			if (isDoPost == false) {
 				keywords = new String(keywords.getBytes("ISO-8859-1"), "UTF-8");
 			}
-			System.out.println("е§диЫбЫї:" + keywords);
+			System.out.println("е§дкЫбЫї:" + keywords);
 			List<UserInfo> userinfoList = service.findUserInfoByKeyWords(keywords);
 			String json = GsonUtil.toJson(userinfoList);
 			out.println(json);
