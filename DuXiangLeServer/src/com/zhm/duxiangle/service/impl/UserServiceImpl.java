@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 		if (TextUtils.isEmpty(userId)) {
 			return null;
 		}
-		return dao.getUserInfoByUserName(Integer.valueOf(userId));
+		return dao.getUserInfoByUserid(Integer.valueOf(userId));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int updateUserInfo(UserInfo userInfo) {
-		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		UserInfo info = dao.getUserInfoByUserid(Integer.valueOf(userInfo.getUserId()));
 		if (info == null) {
 			return dao.insertUserInfo(userInfo);
 		} else {
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int updateUserInfoWithoutAvatar(UserInfo userInfo) {
-		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		UserInfo info = dao.getUserInfoByUserid(Integer.valueOf(userInfo.getUserId()));
 		if (info == null) {
 			return dao.insertUserInfo(userInfo);
 		} else {
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updatePicWall(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-		UserInfo info = dao.getUserInfoByUserName(Integer.valueOf(userInfo.getUserId()));
+		UserInfo info = dao.getUserInfoByUserid(Integer.valueOf(userInfo.getUserId()));
 		if (info == null) {
 			return dao.insertUserInfoWithPicWall(userInfo);
 		} else {

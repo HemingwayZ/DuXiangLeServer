@@ -1,5 +1,6 @@
 package com.zhm.duxiangle.control;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -10,67 +11,131 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zhm.duxiangle.bean.Auth;
+import com.zhm.duxiangle.bean.QQUserInfo;
+import com.zhm.duxiangle.bean.User;
+import com.zhm.duxiangle.bean.UserInfo;
 import com.zhm.duxiangle.dao.AuthDao;
+import com.zhm.duxiangle.dao.UserDao;
 import com.zhm.duxiangle.dao.impl.AuthDaoImpl;
+import com.zhm.duxiangle.dao.impl.UserDaoImpl;
+import com.zhm.duxiangle.service.UserService;
+import com.zhm.duxiangle.service.impl.UserServiceImpl;
 import com.zhm.duxiangle.utils.TextUtils;
 
+import io.rong.util.GsonUtil;
+
 /**
- * 用于qq认证 分享，sina认证 分享等操作的类
- * Servlet implementation class AuthServlet
+ * 用于qq认证 分享，sina认证 分享等操作的类 Servlet implementation class AuthServlet
  */
 @WebServlet("/AuthServlet")
 public class AuthServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AuthServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public AuthServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		String action = request.getParameter("action");
-		if(TextUtils.isEmpty(action)){
+		if (TextUtils.isEmpty(action)) {
 			out.print("action is null");
 			return;
 		}
-		//qq认证登录的情况
-		if("auth_by_qq".equals(action)){
+		// qq认证登录的情况
+		if ("auth_by_qq".equals(action)) {
 			String openid = request.getParameter("openid");
-			if(TextUtils.isEmpty(openid)){
+			if (TextUtils.isEmpty(openid)) {
 				out.println("openid is null");
 				return;
 			}
 			String access_token = request.getParameter("access_token");
-			if(TextUtils.isEmpty(access_token)){
+			if (TextUtils.isEmpty(access_token)) {
 				out.println("access_token is null");
 				return;
 			}
-			AuthDao dao = new AuthDaoImpl();
-			Auth auth =  new Auth();
-			auth.setAccess_token(access_token);
-			auth.setOpenid(openid);
-			int i = dao.insertAuth(auth);
-			out.println(i);
+			UserDao dao = new UserDaoImpl();
+			if (null != dao.getUserByOpenid(openid)) {
+				String json = GsonUtil.toJson(dao.getUserByOpenid(openid));
+				out.println(json);
+				return;
+			}
+			User user = new User();
+			user.setAccess_token(access_token);
+			user.setOpenid(openid);
+			user.setAuth_type("qq");
+			boolean auth = dao.registerByAuth(user);
+			User authUser = dao.getUserByOpenid(openid);
+			String json = GsonUtil.toJson(authUser);
+			out.println(json);
 			return;
 		}
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		if ("qq_update_userinfo".equals(action)) {
+			String json = request.getParameter("qquserinfo");
+			if (TextUtils.isEmpty(json)) {
+				out.println("userinfo is null");
+				return;
+			}
+			UserDao dao = new UserDaoImpl();
+			System.out.println("json:" + json);
+			QQUserInfo qqUserinfo = (QQUserInfo) GsonUtil.fromJson(json, QQUserInfo.class);
+
+			if (qqUserinfo != null) {
+				UserInfo userInfo = dao.getUserInfoByUserid(qqUserinfo.getUserid());
+				UserInfo info = new UserInfo();
+				info.setAvatar(qqUserinfo.getFigureurl_qq_2());
+				info.setNickname(qqUserinfo.getNickname());
+				info.setUserId(qqUserinfo.getUserid());
+
+				if (userInfo == null) {
+					
+					int i = dao.insertUserInfo(info);
+					out.println(i);
+				} else {//若用户信息表已经存在，则更新用户信息
+					dao.updateUserInfoAuthByQQ(info);
+				}
+			}
+		}
+	}
+
+	private int updateUserInfo(UserInfo userInfo) {
+
+		UserService service = new UserServiceImpl();
+		UserInfo userInfoByUserId = service.getUserInfoByUserId(String.valueOf(userInfo.getUserId()));
+		if (userInfoByUserId != null) {// 若未新用户则无法进入
+			if (!TextUtils.isEmpty(userInfoByUserId.getAvatar())) {
+				String avatar = userInfoByUserId.getAvatar();
+				avatar = userInfo.getAvatar();
+				System.out.println("avatar:" + avatar);
+				File file = new File(avatar);
+				System.out.println(file.getPath());
+				if (file.exists()) {
+					System.out.println("删除：" + file.delete());
+				}
+			}
+		}
+		return service.updateUserInfo(userInfo);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}

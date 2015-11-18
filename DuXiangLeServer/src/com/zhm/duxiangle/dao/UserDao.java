@@ -23,12 +23,27 @@ public interface UserDao {
 	public User getUserByUserName(String userName);
 
 	/**
+	 * 根据openid获取用户信息
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	public User getUserByOpenid(String openid);
+	/**
 	 * 增加（注册）用户
 	 * 
 	 * @param user
 	 * @return
 	 */
 	public boolean registerUser(User user);
+	
+	
+	/**
+	 * 第三方认证注册
+	 * @param user
+	 * @return
+	 */
+	public boolean registerByAuth(User user);
 
 	/**
 	 * 根据用户名修改用户密码
@@ -44,7 +59,7 @@ public interface UserDao {
 	 * @param userId
 	 * @return
 	 */
-	public UserInfo getUserInfoByUserName(int userId);
+	public UserInfo getUserInfoByUserid(int userId);
 
 	/**
 	 * 更新用户信息
@@ -53,6 +68,13 @@ public interface UserDao {
 	 * @return
 	 */
 	public int updateUserInfo(UserInfo userInfo);
+	/**
+	 * 更新用户信息
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
+	public int updateUserInfoAuthByQQ(UserInfo userInfo);
 
 	/**
 	 * 增加用户详情信息

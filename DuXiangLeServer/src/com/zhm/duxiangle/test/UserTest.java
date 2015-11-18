@@ -34,7 +34,7 @@ public class UserTest {
 	}
 
 	private static void getUserInfoByUserName(UserDaoImpl dao) {
-		UserInfo userInfo = dao.getUserInfoByUserName(1);
+		UserInfo userInfo = dao.getUserInfoByUserid(1);
 		System.out.println(userInfo.getNickname());
 	}
 
