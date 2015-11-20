@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.reflect.TypeToken;
 import com.zhm.duxiangle.bean.Auth;
 import com.zhm.duxiangle.bean.QQUserInfo;
+import com.zhm.duxiangle.bean.SinaUserInfo;
 import com.zhm.duxiangle.bean.User;
 import com.zhm.duxiangle.bean.UserInfo;
 import com.zhm.duxiangle.dao.AuthDao;
@@ -101,13 +103,45 @@ public class AuthServlet extends HttpServlet {
 				info.setUserId(qqUserinfo.getUserid());
 
 				if (userInfo == null) {
-					
 					int i = dao.insertUserInfo(info);
 					out.println(i);
-				} else {//若用户信息表已经存在，则更新用户信息
+				} else {// 若用户信息表已经存在，则更新用户信息
 					dao.updateUserInfoAuthByQQ(info);
 				}
 			}
+			return;
+		}
+		// 新浪微博认证
+		if ("auth_by_sina".equals(action)) {
+			String strUser = request.getParameter("user");
+			System.out.println("user:" + strUser);
+
+			SinaUserInfo sinaUserInfo = (SinaUserInfo) GsonUtil.fromJson(strUser, SinaUserInfo.class);
+			User user = new User();
+			user.setAccess_token(sinaUserInfo.getName());
+			user.setOpenid(sinaUserInfo.getIdstr());
+			user.setAuth_type("sina");
+			UserDao dao = new UserDaoImpl();
+
+			// 若用户已存在
+			if (null != dao.getUserByOpenid(user.getOpenid())) {
+				String json = GsonUtil.toJson(dao.getUserByOpenid(user.getOpenid()));
+				out.println(json);
+				return;
+			}
+			boolean auth = dao.registerByAuth(user);
+			User authUser = dao.getUserByOpenid(sinaUserInfo.getIdstr());
+			//设置用户信息
+			UserInfo userinfo = new UserInfo();
+			userinfo.setUserId(authUser.getUserId());
+			userinfo.setNickname(sinaUserInfo.getName());
+			userinfo.setAvatar(sinaUserInfo.getAvatar_hd());
+			updateUserInfo(userinfo);
+
+			String json = GsonUtil.toJson(authUser);
+			System.out.println(json);
+			out.println(json);
+			return;
 		}
 	}
 
