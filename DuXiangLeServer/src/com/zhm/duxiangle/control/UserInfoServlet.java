@@ -106,6 +106,33 @@ public class UserInfoServlet extends HttpServlet {
 			out.println(json);
 			return;
 		}
+		
+		if("find_userinfo_by_isbn".equals(action)){
+			String isbn = request.getParameter("isbn");
+			if(TextUtils.isEmpty(isbn)){
+				out.println("isbn_is_null");
+				return;
+			}
+			String thispage = request.getParameter("thispage");
+			String rowperpage = request.getParameter("rowperpage");
+			int iThispage = 0;
+			int iRowPerPage = 1;
+			if(TextUtils.isEmpty(thispage)){
+				iThispage = 0;
+			}else{
+				iThispage = Integer.valueOf(thispage);
+			}
+			if(TextUtils.isEmpty(rowperpage)){
+				iRowPerPage = 1;
+			}else{
+				iRowPerPage = Integer.valueOf(rowperpage);
+			}
+			service = new UserServiceImpl();
+			Page page = service.pageUserInfoByIsbn(isbn, iThispage, iRowPerPage);
+			String json = GsonUtil.toJson(page);
+			out.println(json);
+			return;
+		}
 	}
 
 	/**

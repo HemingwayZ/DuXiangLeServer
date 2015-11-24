@@ -40,7 +40,11 @@ public interface UserService {
 	 * @return
 	 */
 	public int updatePicWall(UserInfo userInfo);
-	
+	/**
+	 * 更新有用户文字信息
+	 * @param userInfo
+	 * @return
+	 */
 	public int updateUserInfoWithoutAvatar(UserInfo userInfo);
 	/**
 	 * 用户搜索
@@ -48,5 +52,9 @@ public interface UserService {
 	 * @return
 	 */
 	public List<UserInfo> findUserInfoByKeyWords(String keywords);
-	
+	/**
+	 * 根据书籍的isbn，分页获取收藏了该书的用户信息
+	 * @param isbn
+	 */
+	public Page pageUserInfoByIsbn(String isbn,int thispage,int rowperpage);
 }

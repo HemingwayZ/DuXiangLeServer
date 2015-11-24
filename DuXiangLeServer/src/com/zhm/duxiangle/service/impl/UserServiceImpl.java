@@ -87,4 +87,31 @@ public class UserServiceImpl implements UserService {
 		return dao.findUserInfoByKeyWords(keywords);
 	}
 
+	@Override
+	public Page pageUserInfoByIsbn(String isbn,int thispage,int rowperpage) {
+		Page page = new Page();
+		// 1、当前页面页码
+		page.setThispage(thispage);
+		// 2、每页记录数
+		page.setRowperpage(rowperpage);
+		// 3、总记录数
+		int countrow = dao.getUserInfoCountByIsbn(isbn);
+		page.setCountrow(countrow);
+		// 4、总页数
+		int countpage = countrow / (rowperpage == 0 ? 1 : rowperpage) + ((countrow % rowperpage) == 0 ? 0 : 1);
+		page.setCountpage(countpage);
+		// 5、首页
+		page.setFirstpage(1);
+		// 6、尾页
+		page.setLastpage(countpage);
+		// 7、上一页
+		page.setPrepage(thispage == 0 ? 0 : thispage - 1);
+		// 8、下一页
+		page.setNextpage(thispage == countpage ? countpage : thispage + 1);
+		// 9、每页内容--客户
+		List<UserInfo> infoList = dao.getUserInfoByIsbn(isbn,thispage, rowperpage);
+		page.setList(infoList);
+		return page;
+	}
+
 }

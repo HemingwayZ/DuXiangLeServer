@@ -117,5 +117,15 @@ public interface UserDao {
 	int updateUserInfoWithoutAvatar(UserInfo userInfo);
 
 	public List<UserInfo> findUserInfoByKeyWords(String keywords);
+	/**
+	 * 根据书籍的isbn回去收藏了该书的用户 
+	 * @param isbn
+	 * @param rowperpage 
+	 * @param thispage 
+	 * @return
+	 */
+	public List<UserInfo> getUserInfoByIsbn(String isbn, int thispage, int rowperpage);
+	
+	public int getUserInfoCountByIsbn(String isbn);
 	
 }

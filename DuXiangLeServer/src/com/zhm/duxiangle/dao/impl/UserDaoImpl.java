@@ -267,14 +267,38 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public int updateUserInfoAuthByQQ(UserInfo userInfo) {
 		// TODO Auto-generated method stub
-				sql = "update userinfo set nickname=?,avatar=? where userid=?";
-				System.out.println(userInfo.getUserinfoId());
-				try {
-					return runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getUserId());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return 0;
+		sql = "update userinfo set nickname=?,avatar=? where userid=?";
+		System.out.println(userInfo.getUserinfoId());
+		try {
+			return runner.update(sql, userInfo.getNickname(), userInfo.getAvatar(), userInfo.getUserId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public List<UserInfo> getUserInfoByIsbn(String isbn,int thispage,int rowperpage) {
+		sql = "select * from userinfo where userid in (select userid from book where isbn10 = ? or isbn13 = ?) limit ?,?";
+		try {
+			return runner.query(sql, new BeanListHandler<UserInfo>(UserInfo.class), isbn, isbn,thispage,rowperpage);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public int getUserInfoCountByIsbn(String isbn) {
+		sql = "select count(userinfoId) from userinfo where userid in (select userid from book where isbn10 = ? or isbn13 = ?)";
+		try {
+			return ((Long) runner.query(sql, new ScalarHandler(), isbn, isbn)).intValue();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

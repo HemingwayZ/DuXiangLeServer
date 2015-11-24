@@ -27,8 +27,12 @@ import io.rong.util.GsonUtil;
 @WebServlet("/IoRongServlet")
 public class IoRongServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String appKey = "82hegw5uh0bpx";
-	private String appSecret = "9Zis0BjmUf1B";
+	//开发环境
+//	private String appKey = "82hegw5uh0bpx";
+//	private String appSecret = "9Zis0BjmUf1B";
+	//生产环境
+	private String appKey = "e0x9wycfxl83q";
+	private String appSecret = "3BQsOGc6o6";
 	private String result;
 
 	/**
