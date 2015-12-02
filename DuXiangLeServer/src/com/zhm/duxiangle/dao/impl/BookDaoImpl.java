@@ -111,7 +111,8 @@ public class BookDaoImpl implements BookDao {
 			}else{
 			keywords = "%" + keywords + "%";
 			//or strauthor like ? or subtitle like ? or publisher like ?
-			sql = "select count(*) from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =?";
+//			sql = "select count(*) from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =?";
+			sql = "select count(*) from book where title like ? and userid =?";
 			}
 			//, keywords, keywords, keywords
 			return ((Long) (runner.query(sql, new ScalarHandler(), keywords, userid))).intValue();
@@ -132,8 +133,9 @@ public class BookDaoImpl implements BookDao {
 
 			}else{
 			keywords = "%" + keywords + "%";
-			//or strauthor like ? or subtitle like ? or publisher like ?
-			sql = "select * from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =? limit ?,?";
+//			or strauthor like ? or subtitle like ? or publisher like ?
+//			sql = "select * from book where ( title or subtitle or strAuthor or publisher like ?  ) and userid =? limit ?,?";
+			sql = "select * from book where title like ? and userid =? limit ?,?";
 			}
 			//,keywords,keywords,keywords
 			return runner.query(sql, new BeanListHandler<Book>(Book.class),keywords, userid, thispage, rowperpage);
